@@ -1,4 +1,4 @@
-name: Ip Files
+name: IP Files
 
 on:
   workflow_dispatch:  # Manual trigger via GitHub UI
@@ -23,10 +23,15 @@ jobs:
       run: |
         curl -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendDocument" \
           -F chat_id="${{ secrets.CHAT_ID }}" \
-          -F document=@export.json
+          -F document=@export.json \
+          -F caption="Export file containing all data."
+        
         curl -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendDocument" \
           -F chat_id="${{ secrets.CHAT_ID }}" \
-          -F document=@ipv4.json
+          -F document=@ipv4.json \
+          -F caption="IPv4 addresses list."
+        
         curl -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendDocument" \
           -F chat_id="${{ secrets.CHAT_ID }}" \
-          -F document=@ipv6.json
+          -F document=@ipv6.json \
+          -F caption="IPv6 addresses list."
