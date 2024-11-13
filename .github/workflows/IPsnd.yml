@@ -15,7 +15,7 @@ jobs:
       - name: Checkout the repository
         uses: actions/checkout@v3
 
-      - name: Send files to Telegram with text and button
+      - name: Send files to Telegram and then send message
         env:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           CHAT_ID: ${{ secrets.CHAT_ID }}
@@ -35,13 +35,18 @@ jobs:
 
           # Iterate through each file and send to Telegram
           for file_url in "${FILES[@]}"; do
-            # Download the file from the raw URL
+            # Download the file
             curl -s -O $file_url
 
-            # Get the filename from the URL (basename removes the directory part)
+            # Get the filename from the URL
             FILENAME=$(basename $file_url)
 
-            # Create the message text
+            # Send the file to Telegram first
+            curl -s -X POST "https://api.telegram.org/bot$TELEGRAM_TOKEN/sendDocument" \
+              -F document=@"$FILENAME" \
+              -F chat_id="$CHAT_ID"
+
+            # Create the message text (this is sent after the file)
             MESSAGE_TEXT="Here is your file: $FILENAME.
 Sent by: $GITHUB_USERNAME
 Date: $DATE
@@ -49,15 +54,10 @@ Click the button to take an action.
 
 https://t.me/Block_Script"
 
-            # Inline keyboard for Telegram message with action button
-            INLINE_KEYBOARD='[{"text":"Run Action","callback_data":"run_action"}]'
-
-            # Send the file with message text and inline button to Telegram
-            curl -s -X POST "https://api.telegram.org/bot$TELEGRAM_TOKEN/sendDocument" \
-              -F document=@"$FILENAME" \
-              -F chat_id="$CHAT_ID" \
-              -F caption="$MESSAGE_TEXT" \
-              -F reply_markup="{\"inline_keyboard\":$INLINE_KEYBOARD}"
+            # Send the message after the file is sent
+            curl -s -X POST "https://api.telegram.org/bot$TELEGRAM_TOKEN/sendMessage" \
+              -d chat_id="$CHAT_ID" \
+              -d text="$MESSAGE_TEXT"
 
             # Optionally, remove the file after sending
             rm -f "$FILENAME"
