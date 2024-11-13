@@ -1,0 +1,31 @@
+name: Forwarders
+
+on:
+  workflow_dispatch: # Allows you to manually trigger the workflow
+  schedule:
+    - cron: '0 * * * *' # Runs every hour; adjust as needed
+
+jobs:
+  run_bot:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install python-telegram-bot==20.3
+
+    - name: Run Telegram bot
+      env:
+        TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+        CHAT_ID: ${{ secrets.CHAT_ID }}
+      run: |
+        python telegram_bot/forward_bot.py
