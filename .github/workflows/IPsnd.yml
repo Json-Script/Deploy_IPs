@@ -1,4 +1,4 @@
-name: Send Files to Telegram
+name: IP Files
 
 on:
   push:
@@ -12,22 +12,32 @@ jobs:
       - name: Checkout the repository
         uses: actions/checkout@v3
 
-      - name: Send raw URLs to Telegram
+      - name: Send files to Telegram
         env:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           CHAT_ID: ${{ secrets.CHAT_ID }}
         run: |
           # List of raw URLs of the files in the list/ directory
           FILES=(
+            "https://raw.githubusercontent.com/Json-Script/Collect_IPs/main/list/export.json"
             "https://raw.githubusercontent.com/Json-Script/Collect_IPs/main/list/ipv4.json"
             "https://raw.githubusercontent.com/Json-Script/Collect_IPs/main/list/ipv6.json"
-            "https://raw.githubusercontent.com/Json-Script/Collect_IPs/main/list/export.json"
             # Add more URLs as needed
           )
 
-          # Iterate over each URL and send it as a message to Telegram
+          # Download each file and send it to Telegram
           for file_url in "${FILES[@]}"; do
-            curl -s -X POST "https://api.telegram.org/bot$TELEGRAM_TOKEN/sendMessage" \
-              -H "Content-Type: application/json" \
-              -d '{"chat_id":"'$CHAT_ID'", "text":"Sending file URL: '$file_url'"}'
+            # Download the file
+            curl -s -O $file_url
+
+            # Get the filename from the URL
+            FILENAME=$(basename $file_url)
+
+            # Send the file as a document to Telegram
+            curl -s -X POST "https://api.telegram.org/bot$TELEGRAM_TOKEN/sendDocument" \
+              -F document=@"$FILENAME" \
+              -F chat_id="$CHAT_ID"
+
+            # Optionally, remove the file after sending
+            rm -f "$FILENAME"
           done
