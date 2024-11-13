@@ -1,9 +1,9 @@
-name: Forwarders
+name: Run Telegram Forwarding Bot
 
 on:
-  workflow_dispatch: # Allows you to manually trigger the workflow
+  workflow_dispatch: # Allows manual trigger
   schedule:
-    - cron: '0 * * * *' # Runs every hour; adjust as needed
+    - cron: '0 * * * *' # Run hourly (adjust as needed)
 
 jobs:
   run_bot:
@@ -26,6 +26,6 @@ jobs:
     - name: Run Telegram bot
       env:
         TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
-        CHAT_ID: ${{ secrets.CHAT_ID }}
+        My.Chat.id: ${{ secrets.My.Chat.id }}
       run: |
         python telegram_bot/forward_bot.py
