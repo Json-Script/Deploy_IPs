@@ -19,6 +19,11 @@ jobs:
         curl -o ipv4.json https://raw.githubusercontent.com/Json-Script/Collect_IPs/main/list/ipv4.json
         curl -o ipv6.json https://raw.githubusercontent.com/Json-Script/Collect_IPs/main/list/ipv6.json
 
+    - name: Verify files
+      run: |
+        # Check if files were downloaded successfully
+        ls -l export.json ipv4.json ipv6.json
+
     - name: Send files to Telegram bot
       run: |
         curl -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendDocument" \
