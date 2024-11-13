@@ -1,0 +1,25 @@
+name: Send Telegram Message with File Content
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 * * * *'  # Runs every hour, modify as needed
+
+jobs:
+  sendTelegramMessage:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get file content
+        id: get_content
+        run: |
+          FILE_URL="https://raw.githubusercontent.com/Json-Script/Collect_Keys/main/plus/full"
+          FILE_CONTENT=$(curl -ks "$FILE_URL")
+          echo "::set-output name=content::$FILE_CONTENT"
+
+      - name: Send message to Telegram
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          CHAT_ID: ${{ secrets.CHAT_ID }}
+        run: |
+          MESSAGE="File Content:\n${{ steps.get_content.outputs.content }}"
+          curl -ks -H "Content-Type: application/json" -d "{\"chat_id\":$CHAT_ID,\"text\":\"$MESSAGE\"}" "https://api.telegram.org/bot$TELEGRAM_TOKEN/sendMessage"
