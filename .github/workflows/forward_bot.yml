@@ -1,31 +1,31 @@
-name: Run Telegram Bot to Relay Messages
+name: Telegram Bot
 
 on:
-  workflow_dispatch: # Allows for manual triggering
-  schedule:
-    - cron: '0 * * * *' # Runs every hour
+  push:
+    branches:
+      - main
+  workflow_dispatch:
 
 jobs:
-  run_bot:
+  deploy:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.9'
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install python-telegram-bot==20.3
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install python-telegram-bot
 
-    - name: Run Telegram bot
-      env:
-        TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
-        My.Chat.id: ${{ secrets.MY_CHAT_ID }}
-      run: |
-        python telegram_bot/forward_bot.py
+      - name: Run the bot
+        run: |
+          python bot.py  # Replace with your bot script file
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          OWNER_ID: ${{ secrets.MY_CHAT_ID }}
