@@ -19,24 +19,29 @@ jobs:
         curl -o ipv4.json https://raw.githubusercontent.com/Json-Script/Collect_IPs/main/list/ipv4.json
         curl -o ipv6.json https://raw.githubusercontent.com/Json-Script/Collect_IPs/main/list/ipv6.json
 
-    - name: Verify files
-      run: |
-        # Check if files were downloaded successfully
-        ls -l export.json ipv4.json ipv6.json
-
     - name: Send files to Telegram bot
       run: |
         curl -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendDocument" \
-          -F chat_id="@Block_Script" \
+          -F chat_id="${{ secrets.CHAT_ID }}" \
           -F document=@export.json \
-          -F caption="GitHub Username: Json-Script\nExport file containing all data."
+          -F caption="Export file containing all data."
         
         curl -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendDocument" \
-          -F chat_id="@Block_Script" \
+          -F chat_id="${{ secrets.CHAT_ID }}" \
           -F document=@ipv4.json \
-          -F caption="GitHub Username: Json-Script\nIPv4 addresses list."
+          -F caption="IPv4 addresses list."
         
         curl -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendDocument" \
-          -F chat_id="@Block_Script" \
+          -F chat_id="${{ secrets.CHAT_ID }}" \
           -F document=@ipv6.json \
-          -F caption="GitHub Username: Json-Script\nIPv6 addresses list."
+          -F caption="IPv6 addresses list."
+
+    - name: Send additional information to Telegram bot
+      run: |
+        curl -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage" \
+          -F chat_id="${{ secrets.CHAT_ID }}" \
+          -F text="GitHub: https://github.com/Json_Script"
+        
+        curl -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage" \
+          -F chat_id="${{ secrets.CHAT_ID }}" \
+          -F text="Channel ID: Block_Script"
