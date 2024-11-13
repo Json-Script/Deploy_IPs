@@ -31,7 +31,6 @@ jobs:
             "https://raw.githubusercontent.com/Json-Script/Collect_IPs/main/list/export.json"
             "https://raw.githubusercontent.com/Json-Script/Collect_IPs/main/list/ipv4.json"
             "https://raw.githubusercontent.com/Json-Script/Collect_IPs/main/list/ipv6.json"
-            # Add more URLs as needed
           )
 
           # Iterate through each file and send to Telegram
