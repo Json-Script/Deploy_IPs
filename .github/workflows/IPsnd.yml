@@ -1,1 +1,38 @@
-test
+name: Send Files to Telegram
+
+on:
+  push:
+    branches:
+      - main  # Trigger this action on push to the 'main' branch (adjust as needed)
+
+jobs:
+  send-message:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up curl
+      run: sudo apt-get install curl
+
+    - name: Send Files to Telegram
+      env:
+        TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}  # Store your bot token in GitHub secrets
+        CHAT_ID: ${{ secrets.CHAT_ID }}  # Store the chat ID in GitHub secrets
+      run: |
+        # GitHub raw URL for your files
+        GITHUB_RAW_URL="https://raw.githubusercontent.com/Json-Script/Test/main/list"
+        
+        # List of files to send (replace with your actual filenames)
+        FILES=("file1.txt" "file2.txt")  # Add more filenames as needed
+        
+        for FILE in "${FILES[@]}"; do
+          # Fetch the file content from GitHub using curl
+          TEXT=$(curl -s "$GITHUB_RAW_URL/$FILE")
+          
+          # Send each file content as a separate message to the Telegram channel
+          curl -ks -H "Content-Type: application/json" -d \
+            "{\"chat_id\":\"$CHAT_ID\",\"text\":\"$TEXT\"}" \
+            "https://api.telegram.org/bot$TELEGRAM_TOKEN/sendMessage"
+        done
