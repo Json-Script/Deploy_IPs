@@ -1,7 +1,6 @@
 name: Send Files to Telegram
 
 on:
-  workflow_dispatch:
   push:
     branches:
       - main  # Trigger this action on push to the 'main' branch (adjust as needed)
@@ -32,6 +31,9 @@ jobs:
           # Fetch the file content from GitHub using curl
           TEXT=$(curl -s "$GITHUB_RAW_URL/$FILE")
           
+          # Optionally, clean up the JSON content (removing unwanted characters)
+          TEXT=$(echo "$TEXT" | jq -r .)  # Ensure it's plain text if it's a JSON object
+
           # Send each file content as a separate message to the Telegram channel
           curl -ks -H "Content-Type: application/json" -d \
             "{\"chat_id\":\"$CHAT_ID\",\"text\":\"$TEXT\"}" \
