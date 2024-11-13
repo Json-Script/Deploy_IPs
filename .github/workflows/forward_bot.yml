@@ -26,6 +26,6 @@ jobs:
     - name: Run Telegram bot
       env:
         TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
-        My.Chat.id: ${{ secrets.My.Chat.id }}
+        My.Chat.id: ${{ secrets.MY_CHAT_ID }}
       run: |
         python telegram_bot/forward_bot.py
