@@ -1,6 +1,7 @@
 name: Send Files to Telegram
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - main  # Trigger this action on push to the 'main' branch (adjust as needed)
