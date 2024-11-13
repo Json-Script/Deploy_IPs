@@ -2,11 +2,10 @@
 name: Send Files to Telegram
 
 on:
+  workflow_dispatch:
   push:
-    branches:
-      - main
+    branches: [ "main" ]
   schedule:
-    # Runs every hour
     - cron: '0 * * * *'
 
 jobs:
