@@ -20,7 +20,7 @@ jobs:
 
     - name: Send files to Telegram bot
       run: |
-        curl -X POST "https://api.telegram.org/bot${{ secrets.TG_BOT_TOKEN }}/sendDocument" \
+        curl -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendDocument" \
           -F chat_id="${{ secrets.CHAT_ID }}" \
           -F document=@export.json
         curl -X POST "https://api.telegram.org/bot${{ secrets.TG_BOT_TOKEN }}/sendDocument" \
