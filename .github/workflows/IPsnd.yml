@@ -1,4 +1,4 @@
-name: IP Files
+name: Send Files to Telegram
 
 on:
   push:
