@@ -5,7 +5,7 @@ from telegram.ext import ApplicationBuilder, MessageHandler, filters, ContextTyp
 
 # Retrieve the bot token and chat ID from environment variables
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
-CHAT_ID = os.getenv("My.Chat.id")
+CHAT_ID = os.getenv("MY_CHAT_ID")
 
 async def forward_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     # Forward the received message to the specified chat ID
