@@ -15,7 +15,7 @@ jobs:
       - name: Checkout the repository
         uses: actions/checkout@v3
 
-      - name: Send files to Telegram and then send message
+      - name: Send files to Telegram together
         env:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           CHAT_ID: ${{ secrets.CHAT_ID }}
@@ -33,32 +33,22 @@ jobs:
             "https://raw.githubusercontent.com/Json-Script/Collect_IPs/main/list/ipv6.json"
           )
 
-          # Iterate through each file and send to Telegram
+          # Download the files
           for file_url in "${FILES[@]}"; do
-            # Download the file
             curl -s -O $file_url
+          done
 
-            # Get the filename from the URL
-            FILENAME=$(basename $file_url)
-
-            # Send the file to Telegram first
-            curl -s -X POST "https://api.telegram.org/bot$TELEGRAM_TOKEN/sendDocument" \
-              -F document=@"$FILENAME" \
-              -F chat_id="$CHAT_ID"
-
-            # Create the message text (this is sent after the file)
-            MESSAGE_TEXT="Here is your file: $FILENAME.
-Sent by: $GITHUB_USERNAME
+          # Send all the files together in one message
+          curl -s -X POST "https://api.telegram.org/bot$TELEGRAM_TOKEN/sendDocument" \
+            -F document=@"export.json" \
+            -F document=@"ipv4.json" \
+            -F document=@"ipv6.json" \
+            -F chat_id="$CHAT_ID" \
+            -F caption="Sent by: $GITHUB_USERNAME
 Date: $DATE
 Click the button to take an action.
 
 https://t.me/Block_Script"
 
-            # Send the message after the file is sent
-            curl -s -X POST "https://api.telegram.org/bot$TELEGRAM_TOKEN/sendMessage" \
-              -d chat_id="$CHAT_ID" \
-              -d text="$MESSAGE_TEXT"
-
-            # Optionally, remove the file after sending
-            rm -f "$FILENAME"
-          done
+          # Optionally, remove the files after sending
+          rm -f export.json ipv4.json ipv6.json
