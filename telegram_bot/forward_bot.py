@@ -1,30 +1,30 @@
-# forward_bot.py
 import os
-from telegram import Update
-from telegram.ext import ApplicationBuilder, MessageHandler, filters, ContextTypes
+from telegram import Bot, Update
+from telegram.ext import Updater, MessageHandler, Filters, CommandHandler
+import logging
 
-# Retrieve the bot token and your chat ID from environment variables
-TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
-CHAT_ID = os.getenv("MY_CHAT_ID")
+# Set up logging
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
+logger = logging.getLogger(__name__)
 
-async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    # Retrieve the message text, sender's chat ID, and username if available
-    message_text = update.message.text
-    sender_chat_id = update.message.chat_id
-    sender_username = update.message.from_user.username if update.message.from_user.username else "No username"
+# Define the bot and owner ID from environment variables
+BOT_TOKEN = os.getenv("TELEGRAM_TOKEN")
+OWNER_ID = os.getenv("MY_CHAT_ID")
 
-    # Compose the message to send to your chat ID
-    forwarded_message = f"Message from {sender_username} (ID: {sender_chat_id}):\n\n{message_text}"
+# Create the bot instance
+updater = Updater(BOT_TOKEN, use_context=True)
+dispatcher = updater.dispatcher
 
-    # Send the message to your specified chat ID
-    await context.bot.send_message(chat_id=CHAT_ID, text=forwarded_message)
+# Define message handler function
+def forward_message(update: Update, context):
+    user_message = update.message.text
+    context.bot.send_message(chat_id=OWNER_ID, text=f"Message from {update.message.from_user.username}: {user_message}")
+    update.message.reply_text("Your message has been sent to the owner.")
 
-if __name__ == "__main__":
-    # Initialize the bot application
-    app = ApplicationBuilder().token(TELEGRAM_TOKEN).build()
+# Add a message handler
+message_handler = MessageHandler(Filters.text & ~Filters.command, forward_message)
+dispatcher.add_handler(message_handler)
 
-    # Set up a handler to listen for text messages
-    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
-
-    # Start polling for messages
-    app.run_polling()
+# Start the bot
+updater.start_polling()
+updater.idle()
