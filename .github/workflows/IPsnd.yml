@@ -1,4 +1,4 @@
-name: IP Files
+name: Ip Files
 
 on:
   workflow_dispatch:  # Manual trigger via GitHub UI
