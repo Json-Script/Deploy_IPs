@@ -1,6 +1,0 @@
-- name: Send test message to Telegram
-- name: Send test message to Telegram
-  run: |
-    curl -ks -H "Content-Type: application/json" \
-      -d "{\"chat_id\": YOUR_CHAT_ID, \"text\": \"test text\"}" \
-      "https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage"
