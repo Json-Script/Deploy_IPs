@@ -25,16 +25,22 @@ jobs:
         GITHUB_RAW_URL="https://raw.githubusercontent.com/Json-Script/Test/main/list"
         
         # List of files to send (replace with your actual filenames)
-        FILES=("ipv4.json" "ipv6.json")  # Add more filenames as needed
+        FILES=("file1.json" "file2.json")  # Add more filenames as needed
         
         for FILE in "${FILES[@]}"; do
           # Fetch the file content from GitHub using curl
           TEXT=$(curl -s "$GITHUB_RAW_URL/$FILE")
           
-          # Optionally, clean up the JSON content (removing unwanted characters)
-          TEXT=$(echo "$TEXT" | jq -r .)  # Ensure it's plain text if it's a JSON object
+          # Output the raw content for debugging
+          echo "Fetched content of $FILE: $TEXT"
+          
+          # Check if the content looks as expected
+          if [ -z "$TEXT" ]; then
+            echo "Error: No content fetched for $FILE"
+            continue
+          fi
 
-          # Send each file content as a separate message to the Telegram channel
+          # Send the content to the Telegram channel as a message
           curl -ks -H "Content-Type: application/json" -d \
             "{\"chat_id\":\"$CHAT_ID\",\"text\":\"$TEXT\"}" \
             "https://api.telegram.org/bot$TELEGRAM_TOKEN/sendMessage"
