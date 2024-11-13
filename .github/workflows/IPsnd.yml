@@ -21,32 +21,17 @@ jobs:
 
     - name: Send files to Telegram bot
       run: |
-        # Send export.json
         curl -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendDocument" \
           -F chat_id="${{ secrets.CHAT_ID }}" \
           -F document=@export.json \
-          -F caption="$(cat <<EOF
-Export file containing all data, useful for network analysis and management.
-https://raw.githubusercontent.com/Json-Script/Collect_IPs/main/list/export.json
-EOF
-)"
+          -F caption="Export file containing all data, useful for network analysis and management. https://raw.githubusercontent.com/Json-Script/Collect_IPs/main/list/export.json"
         
-        # Send ipv4.json
         curl -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendDocument" \
           -F chat_id="${{ secrets.CHAT_ID }}" \
           -F document=@ipv4.json \
-          -F caption="$(cat <<EOF
-List of IPv4 addresses collected for tracking and analysis.
-https://raw.githubusercontent.com/Json-Script/Collect_IPs/main/list/ipv4.json
-EOF
-)"
+          -F caption="List of IPv4 addresses collected for tracking and analysis. https://raw.githubusercontent.com/Json-Script/Collect_IPs/main/list/ipv4.json"
         
-        # Send ipv6.json
         curl -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendDocument" \
           -F chat_id="${{ secrets.CHAT_ID }}" \
           -F document=@ipv6.json \
-          -F caption="$(cat <<EOF
-List of IPv6 addresses collected for tracking and analysis.
-https://raw.githubusercontent.com/Json-Script/Collect_IPs/main/list/ipv6.json
-EOF
-)"
+          -F caption="List of IPv6 addresses collected for tracking and analysis. https://raw.githubusercontent.com/Json-Script/Collect_IPs/main/list/ipv6.json"
