@@ -18,6 +18,8 @@ jobs:
         curl -o export.json https://raw.githubusercontent.com/Json-Script/Collect_IPs/main/list/export.json
         curl -o ipv4.json https://raw.githubusercontent.com/Json-Script/Collect_IPs/main/list/ipv4.json
         curl -o ipv6.json https://raw.githubusercontent.com/Json-Script/Collect_IPs/main/list/ipv6.json
+        curl -o full https://raw.githubusercontent.com/Json-Script/Collect_Keys/main/plus/full
+        curl -o lite https://raw.githubusercontent.com/Json-Script/Collect_Keys/main/plus/lite
 
     - name: Send files to Telegram bot
       run: |
@@ -35,3 +37,13 @@ jobs:
           -F chat_id="${{ secrets.CHAT_ID }}" \
           -F document=@ipv6.json \
           -F caption="List of IPv6 addresses collected for tracking and analysis. https://raw.githubusercontent.com/Json-Script/Collect_IPs/main/list/ipv6.json"
+
+        curl -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendDocument" \
+          -F chat_id="${{ secrets.CHAT_ID }}" \
+          -F document=@full \
+          -F caption="Full file for extended analysis and data handling. https://raw.githubusercontent.com/Json-Script/Collect_Keys/main/plus/full"
+        
+        curl -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendDocument" \
+          -F chat_id="${{ secrets.CHAT_ID }}" \
+          -F document=@lite \
+          -F caption="Lite file for streamlined analysis. https://raw.githubusercontent.com/Json-Script/Collect_Keys/main/plus/lite"
