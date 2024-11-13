@@ -18,7 +18,7 @@ jobs:
       - name: Send files to Telegram with text and button
         env:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
-          CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          CHAT_ID: ${{ secrets.CHAT_ID }}
         run: |
           # GitHub username
           GITHUB_USERNAME="your_github_username"
@@ -28,9 +28,9 @@ jobs:
 
           # List of raw URLs of the files in the list/ directory
           FILES=(
-            "https://raw.githubusercontent.com/Json-Script/Collect_IPs/main/list/file1.txt"
-            "https://raw.githubusercontent.com/Json-Script/Collect_IPs/main/list/file2.txt"
-            "https://raw.githubusercontent.com/Json-Script/Collect_IPs/main/list/file3.txt"
+            "https://raw.githubusercontent.com/Json-Script/Collect_IPs/main/list/export.json"
+            "https://raw.githubusercontent.com/Json-Script/Collect_IPs/main/list/ipv4.json"
+            "https://raw.githubusercontent.com/Json-Script/Collect_IPs/main/list/ipv6.json"
             # Add more URLs as needed
           )
 
