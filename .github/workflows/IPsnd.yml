@@ -26,7 +26,7 @@ jobs:
         GITHUB_RAW_URL="https://raw.githubusercontent.com/Json-Script/Test/main/list"
         
         # List of files to send (replace with your actual filenames)
-        FILES=("file1.txt" "file2.txt")  # Add more filenames as needed
+        FILES=("ipv6.json" "ipv4.json "export.json")  # Add more filenames as needed
         
         for FILE in "${FILES[@]}"; do
           # Fetch the file content from GitHub using curl
