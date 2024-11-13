@@ -1,4 +1,4 @@
-name: Ip Files
+name: IP Files
 
 on:
   workflow_dispatch:  # Manual trigger via GitHub UI
@@ -24,14 +24,14 @@ jobs:
         curl -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendDocument" \
           -F chat_id="${{ secrets.CHAT_ID }}" \
           -F document=@export.json \
-          -F caption="Export file containing all data.\nGitHub: https://github.com/Json_Script\nChannel ID: Block_Script"
+          -F caption="Export file containing all data.\nGitHub: [https://github.com/Json_Script](https://github.com/Json_Script)\nChannel: [Block_Script](https://t.me/Block_Script)"
         
         curl -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendDocument" \
           -F chat_id="${{ secrets.CHAT_ID }}" \
           -F document=@ipv4.json \
-          -F caption="IPv4 addresses list.\nGitHub: https://github.com/Json_Script\nChannel ID: Block_Script"
+          -F caption="IPv4 addresses list.\nGitHub: [https://github.com/Json_Script](https://github.com/Json_Script)\nChannel: [Block_Script](https://t.me/Block_Script)"
         
         curl -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendDocument" \
           -F chat_id="${{ secrets.CHAT_ID }}" \
           -F document=@ipv6.json \
-          -F caption="IPv6 addresses list.\nGitHub: https://github.com/Json_Script\nChannel ID: Block_Script"
+          -F caption="IPv6 addresses list.\nGitHub: [https://github.com/Json_Script](https://github.com/Json_Script)\nChannel: [Block_Script](https://t.me/Block_Script)"
