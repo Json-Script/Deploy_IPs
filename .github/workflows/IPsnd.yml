@@ -1,3 +1,4 @@
+
 name: Send Files to Telegram
 
 on:
@@ -15,12 +16,12 @@ jobs:
       - name: Checkout the repository
         uses: actions/checkout@v3
 
-      - name: Send files to Telegram together
+      - name: Send files to Telegram with text and button
         env:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           CHAT_ID: ${{ secrets.CHAT_ID }}
         run: |
-          # GitHub username (Replace with your GitHub username)
+          # GitHub username
           GITHUB_USERNAME="your_github_username"
 
           # Date of sending the file (format: YYYY-MM-DD)
@@ -33,22 +34,32 @@ jobs:
             "https://raw.githubusercontent.com/Json-Script/Collect_IPs/main/list/ipv6.json"
           )
 
-          # Download the files
+          # Iterate through each file and send to Telegram
           for file_url in "${FILES[@]}"; do
+            # Download the file
             curl -s -O $file_url
-          done
 
-          # Send all the files together in one message
-          curl -s -X POST "https://api.telegram.org/bot$TELEGRAM_TOKEN/sendDocument" \
-            -F document=@"export.json" \
-            -F document=@"ipv4.json" \
-            -F document=@"ipv6.json" \
-            -F chat_id="$CHAT_ID" \
-            -F caption="Sent by: $GITHUB_USERNAME
+            # Get the filename from the URL
+            FILENAME=$(basename $file_url)
+
+            # Create text for the message with GitHub username, date, and link
+            MESSAGE_TEXT="Here is your file: $FILENAME.
+Sent by: $GITHUB_USERNAME
 Date: $DATE
 Click the button to take an action.
 
 https://t.me/Block_Script"
 
-          # Optionally, remove the files after sending
-          rm -f export.json ipv4.json ipv6.json
+            # Create the inline keyboard button (example action with callback data)
+            INLINE_KEYBOARD='[{"text":"Run Action","callback_data":"run_action"}]'
+
+            # Send the file with text and a button to Telegram
+            curl -s -X POST "https://api.telegram.org/bot$TELEGRAM_TOKEN/sendDocument" \
+              -F document=@"$FILENAME" \
+              -F chat_id="$CHAT_ID" \
+              -F caption="$MESSAGE_TEXT" \
+              -F reply_markup="{\"inline_keyboard\":[$INLINE_KEYBOARD]}"
+
+            # Optionally, remove the file after sending
+            rm -f "$FILENAME"
+          done
