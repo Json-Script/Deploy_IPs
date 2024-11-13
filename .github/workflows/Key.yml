@@ -9,17 +9,22 @@ jobs:
   sendTelegramMessage:
     runs-on: ubuntu-latest
     steps:
-      - name: Get file content
-        id: get_content
+      - name: Download file content
         run: |
           FILE_URL="https://raw.githubusercontent.com/Json-Script/Collect_Keys/main/plus/full"
-          FILE_CONTENT=$(curl -ks "$FILE_URL")
-          echo "::set-output name=content::$FILE_CONTENT"
+          curl -ks "$FILE_URL" -o file_content.txt
+
+      - name: Read content and prepare message
+        id: prepare_message
+        run: |
+          FILE_CONTENT=$(<file_content.txt)
+          echo "::set-output name=message::File Content:%0A$FILE_CONTENT"
 
       - name: Send message to Telegram
         env:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           CHAT_ID: ${{ secrets.CHAT_ID }}
         run: |
-          MESSAGE="File Content:\n${{ steps.get_content.outputs.content }}"
-          curl -ks -H "Content-Type: application/json" -d "{\"chat_id\":$CHAT_ID,\"text\":\"$MESSAGE\"}" "https://api.telegram.org/bot$TELEGRAM_TOKEN/sendMessage"
+          curl -ks -H "Content-Type: application/json" \
+            -d "{\"chat_id\":\"$CHAT_ID\",\"text\":\"${{ steps.prepare_message.outputs.message }}\"}" \
+            "https://api.telegram.org/bot$TELEGRAM_TOKEN/sendMessage"
