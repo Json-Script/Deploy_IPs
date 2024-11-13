@@ -12,23 +12,22 @@ jobs:
       - name: Checkout the repository
         uses: actions/checkout@v3
 
-      - name: Download files from GitHub repository
-        run: |
-          # Loop through all files in the list/ directory and download them
-          for file in $(curl -s https://api.github.com/repos/Json-Script/Collect_IPs/contents/list | jq -r '.[].name'); do
-            curl -s -O https://raw.githubusercontent.com/Json-Script/Collect_IPs/main/list/$file
-          done
-
-      - name: Send files to Telegram
+      - name: Send raw URLs to Telegram
         env:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: |
-          for file in list/*; do
+          # List of raw URLs of the files in the list/ directory
+          FILES=(
+            "https://raw.githubusercontent.com/Json-Script/Collect_IPs/main/list/ipv4.json"
+            "https://raw.githubusercontent.com/Json-Script/Collect_IPs/main/list/ipv6.json"
+            "https://raw.githubusercontent.com/Json-Script/Collect_IPs/main/list/export.json"
+            # Add more URLs as needed
+          )
+
+          # Iterate over each URL and send it as a message to Telegram
+          for file_url in "${FILES[@]}"; do
             curl -s -X POST "https://api.telegram.org/bot$TELEGRAM_TOKEN/sendMessage" \
               -H "Content-Type: application/json" \
-              -d '{"chat_id":"'$CHAT_ID'", "text":"Sending file: '$file'"}'
-            curl -s -X POST "https://api.telegram.org/bot$TELEGRAM_TOKEN/sendDocument" \
-              -F document=@"$file" \
-              -F chat_id="$CHAT_ID"
+              -d '{"chat_id":"'$CHAT_ID'", "text":"Sending file URL: '$file_url'"}'
           done
