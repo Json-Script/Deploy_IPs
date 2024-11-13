@@ -1,9 +1,9 @@
-name: Run Telegram Forwarding Bot
+name: Run Telegram Bot to Relay Messages
 
 on:
-  workflow_dispatch: # Allows manual trigger
+  workflow_dispatch: # Allows for manual triggering
   schedule:
-    - cron: '0 * * * *' # Run hourly (adjust as needed)
+    - cron: '0 * * * *' # Runs every hour
 
 jobs:
   run_bot:
