@@ -26,13 +26,16 @@ def fetch_and_send_raw_content():
     """Fetch the content from the raw GitHub URLs and send it to the Telegram channel."""
     for url in raw_links:
         try:
+            print(f"Fetching: {url}")  # Debugging log
             # Fetch raw content
             response = requests.get(url)
             response.raise_for_status()
             content = response.text
+            print(f"Fetched content from {url}")  # Debugging log
             # Send the content as a message
             send_message(content)
         except requests.exceptions.RequestException as e:
+            print(f"Failed to fetch {url}: {str(e)}")  # Debugging log
             send_message(f"Failed to fetch {url}: {str(e)}")
 
 if __name__ == '__main__':
