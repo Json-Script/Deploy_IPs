@@ -26,6 +26,11 @@ jobs:
           python -m pip install --upgrade pip
           pip install requests python-telegram-bot
 
+      # Verify dependencies (debugging)
+      - name: Verify dependencies
+        run: |
+          pip freeze
+
       # Run Telegram bot script
       - name: Run Telegram bot script
         env:
