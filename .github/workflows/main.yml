@@ -9,41 +9,75 @@ jobs:
   send-files:
     runs-on: ubuntu-latest
 
+    # Define environment variables for URLs and secrets for easier maintenance
+    env:
+      CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+      BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+      
+      EXPORT_URL: "https://raw.githubusercontent.com/Json-Script/Collect_IPs/main/list/export.json"
+      IPV4_URL: "https://raw.githubusercontent.com/Json-Script/Collect_IPs/main/list/ipv4.json"
+      IPV6_URL: "https://raw.githubusercontent.com/Json-Script/Collect_IPs/main/list/ipv6.json"
+      FULL_URL: "https://raw.githubusercontent.com/Json-Script/Collect_Keys/main/plus/full"
+      LITE_URL: "https://raw.githubusercontent.com/Json-Script/Collect_Keys/main/plus/lite"
+
     steps:
-    - name: Initialize Repository
-      uses: actions/checkout@v2
+      # Step 1: Initialize Repository
+      - name: Initialize Repository
+        uses: actions/checkout@v2
 
-    - name: Retrieve Required Files
-      run: |
-        curl -o export.json https://raw.githubusercontent.com/Json-Script/Collect_IPs/main/list/export.json
-        curl -o ipv4.json https://raw.githubusercontent.com/Json-Script/Collect_IPs/main/list/ipv4.json
-        curl -o ipv6.json https://raw.githubusercontent.com/Json-Script/Collect_IPs/main/list/ipv6.json
-        curl -o full https://raw.githubusercontent.com/Json-Script/Collect_Keys/main/plus/full
-        curl -o lite https://raw.githubusercontent.com/Json-Script/Collect_Keys/main/plus/lite
+      # Step 2: Retrieve Files with Retry Logic
+      - name: Retrieve Required Files
+        run: |
+          set -e  # Exit on error to ensure workflow fails if any download fails
+          
+          # Download each file with retry logic
+          curl --retry 3 -o export.json $EXPORT_URL
+          curl --retry 3 -o ipv4.json $IPV4_URL
+          curl --retry 3 -o ipv6.json $IPV6_URL
+          curl --retry 3 -o full $FULL_URL
+          curl --retry 3 -o lite $LITE_URL
 
-    - name: Transmit Files to Telegram
-      run: |
-        curl -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument" \
-          -F chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" \
-          -F document=@export.json \
-          -F caption="📂 Export Data File: A meticulously compiled dataset encompassing all network information for advanced analytical processes and system management."
+      # Step 3: Define Captions as Environment Variables
+      - name: Set File Captions
+        run: |
+          echo "CAPTION_EXPORT=📂 Export Data File: A meticulously compiled dataset encompassing all network information for advanced analytical processes and system management." >> $GITHUB_ENV
+          echo "CAPTION_IPV4=🌐 IPv4 Address Registry: A curated repository of IPv4 addresses, methodically organized to support targeted tracking and comprehensive data analysis." >> $GITHUB_ENV
+          echo "CAPTION_IPV6=🌍 IPv6 Address Registry: An extensive collection of IPv6 addresses, optimized for systematic tracking and strategic analytical requirements." >> $GITHUB_ENV
+          echo "CAPTION_FULL=📋 Comprehensive Full File: A detailed data file supporting broad analytical applications and sophisticated data management operations." >> $GITHUB_ENV
+          echo "CAPTION_LITE=📑 Streamlined Lite File: A refined dataset crafted for efficient, focused analyses and lightweight data handling." >> $GITHUB_ENV
 
-        curl -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument" \
-          -F chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" \
-          -F document=@ipv4.json \
-          -F caption="🌐 IPv4 Address Registry: A curated repository of IPv4 addresses, methodically organized to support targeted tracking and comprehensive data analysis."
+      # Step 4: Send Each File Separately to Telegram with Descriptive Captions
+      - name: Send Export File to Telegram
+        run: |
+          curl --retry 3 -X POST "https://api.telegram.org/bot$BOT_TOKEN/sendDocument" \
+            -F chat_id="$CHAT_ID" \
+            -F document=@export.json \
+            -F caption="$CAPTION_EXPORT"
 
-        curl -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument" \
-          -F chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" \
-          -F document=@ipv6.json \
-          -F caption="🌍 IPv6 Address Registry: An extensive collection of IPv6 addresses, optimized for systematic tracking and strategic analytical requirements."
+      - name: Send IPv4 File to Telegram
+        run: |
+          curl --retry 3 -X POST "https://api.telegram.org/bot$BOT_TOKEN/sendDocument" \
+            -F chat_id="$CHAT_ID" \
+            -F document=@ipv4.json \
+            -F caption="$CAPTION_IPV4"
 
-        curl -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument" \
-          -F chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" \
-          -F document=@full \
-          -F caption="📋 Comprehensive Full File: A detailed data file supporting broad analytical applications and sophisticated data management operations."
+      - name: Send IPv6 File to Telegram
+        run: |
+          curl --retry 3 -X POST "https://api.telegram.org/bot$BOT_TOKEN/sendDocument" \
+            -F chat_id="$CHAT_ID" \
+            -F document=@ipv6.json \
+            -F caption="$CAPTION_IPV6"
 
-        curl -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument" \
-          -F chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" \
-          -F document=@lite \
-          -F caption="📑 Streamlined Lite File: A refined dataset crafted for efficient, focused analyses and lightweight data handling."
+      - name: Send Full File to Telegram
+        run: |
+          curl --retry 3 -X POST "https://api.telegram.org/bot$BOT_TOKEN/sendDocument" \
+            -F chat_id="$CHAT_ID" \
+            -F document=@full \
+            -F caption="$CAPTION_FULL"
+
+      - name: Send Lite File to Telegram
+        run: |
+          curl --retry 3 -X POST "https://api.telegram.org/bot$BOT_TOKEN/sendDocument" \
+            -F chat_id="$CHAT_ID" \
+            -F document=@lite \
+            -F caption="$CAPTION_LITE"
