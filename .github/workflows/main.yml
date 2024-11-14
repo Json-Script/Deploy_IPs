@@ -41,9 +41,9 @@ jobs:
               export.json)
                 caption="📂 Export Data File: Comprehensive dataset for analysis." ;;
               ipv4.json)
-                caption="🌐 IPv4 Addresses: Curated registry of IPv4 addresses." ;;
+                caption="🌐 IPv4 Addresses." ;;
               ipv6.json)
-                caption="🌍 IPv6 Addresses: Extensive collection of IPv6 addresses." ;;
+                caption="🌍 IPv6 Addresses." ;;
               full)
                 caption="📋 Full File: Detailed data file for broad analysis." ;;
               lite)
