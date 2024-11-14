@@ -1,14 +1,15 @@
 import os
 import requests
 
-# Set your Telegram bot token and chat ID
-TELEGRAM_BOT_TOKEN = os.environ['TELEGRAM_BOT_TOKEN']
-TELEGRAM_CHAT_ID = os.environ['TELEGRAM_CHAT_ID']
-
+# Define the send_message function before using it
 def send_message(bot_token, chat_id, message):
     url = f'https://api.telegram.org/bot{bot_token}/sendMessage'
     data = {'chat_id': chat_id, 'text': message}
     requests.post(url, data=data)
+
+# Set your Telegram bot token and chat ID
+TELEGRAM_BOT_TOKEN = os.environ['TELEGRAM_BOT_TOKEN']
+TELEGRAM_CHAT_ID = os.environ['TELEGRAM_CHAT_ID']
 
 # Fetch the file contents
 with open('export.json', 'r') as f:
