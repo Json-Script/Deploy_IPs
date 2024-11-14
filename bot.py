@@ -8,11 +8,11 @@ bot_token = os.getenv('TELEGRAM_BOT_TOKEN')
 
 # List of raw GitHub URLs
 raw_links = [
-    'https://github.com/Json-Script/Collect_IPs/blob/main/list/export.json',
-    'https://github.com/Json-Script/Collect_IPs/blob/main/list/ipv4.json',
-    'https://github.com/Json-Script/Collect_IPs/blob/main/list/ipv6.json',
-    'https://raw.githubusercontent.com/Json-Script/Collect_Keys/refs/heads/main/plus/full',
-    'https://raw.githubusercontent.com/Json-Script/Collect_Keys/refs/heads/main/plus/lite'
+    'https://raw.githubusercontent.com/Json-Script/Collect_IPs/main/list/export.json',
+    'https://raw.githubusercontent.com/Json-Script/Collect_IPs/main/list/ipv4.json',
+    'https://raw.githubusercontent.com/Json-Script/Collect_IPs/main/list/ipv6.json',
+    'https://raw.githubusercontent.com/Json-Script/Collect_Keys/main/plus/full',
+    'https://raw.githubusercontent.com/Json-Script/Collect_Keys/main/plus/lite'
 ]
 
 # Initialize the bot
