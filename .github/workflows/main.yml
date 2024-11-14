@@ -1,6 +1,9 @@
 name: Telegram Bot Action
 
 on:
+  push:
+    paths:
+      - '.github/workflows/*'  # Trigger the workflow when any workflow file is updated
   schedule:
     - cron: '0 0 * * *'  # Run at midnight every day (adjust as needed)
   workflow_dispatch:  # Allows manual triggering of the action
