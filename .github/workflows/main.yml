@@ -26,24 +26,24 @@ jobs:
         curl -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument" \
           -F chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" \
           -F document=@export.json \
-          -F caption="🌐 Export File: A comprehensive collection of data, invaluable for network insights and meticulous management. Access it directly here: https://raw.githubusercontent.com/Json-Script/Collect_IPs/main/list/export.json"
+          -F caption="🌐 Export File: A comprehensive collection of data, invaluable for network insights and meticulous management."
         
         curl -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument" \
           -F chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" \
           -F document=@ipv4.json \
-          -F caption="🔍 IPv4 Data: A curated list of IPv4 addresses, compiled for insightful tracking and precise analysis. Explore it here: https://raw.githubusercontent.com/Json-Script/Collect_IPs/main/list/ipv4.json"
+          -F caption="🔍 IPv4 Data: A curated list of IPv4 addresses, compiled for insightful tracking and precise analysis."
         
         curl -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument" \
           -F chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" \
           -F document=@ipv6.json \
-          -F caption="🔍 IPv6 Data: A detailed list of IPv6 addresses, gathered for informed tracking and strategic analysis. Check it out here: https://raw.githubusercontent.com/Json-Script/Collect_IPs/main/list/ipv6.json"
+          -F caption="🔍 IPv6 Data: A detailed list of IPv6 addresses, gathered for informed tracking and strategic analysis."
 
         curl -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument" \
           -F chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" \
           -F document=@full \
-          -F caption="📜 Full File: An expansive dataset for comprehensive analysis and data handling. View it here: https://raw.githubusercontent.com/Json-Script/Collect_Keys/main/plus/full"
+          -F caption="📜 Full File: An expansive dataset for comprehensive analysis and data handling."
         
         curl -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument" \
           -F chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" \
           -F document=@lite \
-          -F caption="📜 Lite File: A refined file for focused analysis, streamlined for essential insights. Discover it here: https://raw.githubusercontent.com/Json-Script/Collect_Keys/main/plus/lite"
+          -F caption="📜 Lite File: A refined file for focused analysis, streamlined for essential insights."
