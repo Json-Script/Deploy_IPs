@@ -5,6 +5,11 @@ import requests
 TELEGRAM_BOT_TOKEN = os.environ['TELEGRAM_BOT_TOKEN']
 TELEGRAM_CHAT_ID = os.environ['TELEGRAM_CHAT_ID']
 
+def send_message(bot_token, chat_id, message):
+    url = f'https://api.telegram.org/bot{bot_token}/sendMessage'
+    data = {'chat_id': chat_id, 'text': message}
+    requests.post(url, data=data)
+
 # Fetch the file contents
 with open('export.json', 'r') as f:
     export_content = f.read()
@@ -20,11 +25,6 @@ with open('full', 'r') as f:
 
 with open('lite', 'r') as f:
     lite_content = f.read()
-
-def send_message(bot_token, chat_id, message):
-    url = f'https://api.telegram.org/bot{bot_token}/sendMessage'
-    data = {'chat_id': chat_id, 'text': message}
-    requests.post(url, data=data)
 
 # Send the file contents as text messages to the Telegram bot
 send_message(TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID, "Export file content:\n\n" + export_content)
