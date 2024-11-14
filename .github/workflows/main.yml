@@ -1,19 +1,19 @@
-name: IP File
+name: IP File Distribution
 
 on:
-  workflow_dispatch:  # Trigger manually through GitHub's interface
+  workflow_dispatch:  # Manual execution via GitHub interface
   schedule:
-    - cron: '0 * * * *'  # Scheduled for the start of every hour
+    - cron: '0 * * * *'  # Automatically triggered every hour
 
 jobs:
   send-files:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Retrieve Repository
+    - name: Initialize Repository
       uses: actions/checkout@v2
 
-    - name: Download Essential Files
+    - name: Retrieve Required Files
       run: |
         curl -o export.json https://raw.githubusercontent.com/Json-Script/Collect_IPs/main/list/export.json
         curl -o ipv4.json https://raw.githubusercontent.com/Json-Script/Collect_IPs/main/list/ipv4.json
@@ -21,29 +21,29 @@ jobs:
         curl -o full https://raw.githubusercontent.com/Json-Script/Collect_Keys/main/plus/full
         curl -o lite https://raw.githubusercontent.com/Json-Script/Collect_Keys/main/plus/lite
 
-    - name: Gracefully Deliver Files to Telegram
+    - name: Transmit Files to Telegram
       run: |
         curl -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument" \
           -F chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" \
           -F document=@export.json \
-          -F caption="🌐 Export File: A comprehensive collection of data, invaluable for network insights and meticulous management."
-        
+          -F caption="📂 **Export Data File:** A meticulously compiled dataset encompassing all network information for advanced analytical processes and system management."
+
         curl -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument" \
           -F chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" \
           -F document=@ipv4.json \
-          -F caption="🔍 IPv4 Data: A curated list of IPv4 addresses, compiled for insightful tracking and precise analysis."
-        
+          -F caption="🌐 **IPv4 Address Registry:** A curated repository of IPv4 addresses, methodically organized to support targeted tracking and comprehensive data analysis."
+
         curl -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument" \
           -F chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" \
           -F document=@ipv6.json \
-          -F caption="🔍 IPv6 Data: A detailed list of IPv6 addresses, gathered for informed tracking and strategic analysis."
+          -F caption="🌍 **IPv6 Address Registry:** An extensive collection of IPv6 addresses, optimized for systematic tracking and strategic analytical requirements."
 
         curl -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument" \
           -F chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" \
           -F document=@full \
-          -F caption="📜 Full File: An expansive dataset for comprehensive analysis and data handling."
-        
+          -F caption="📋 **Comprehensive Full File:** A detailed data file supporting broad analytical applications and sophisticated data management operations."
+
         curl -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument" \
           -F chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" \
           -F document=@lite \
-          -F caption="📜 Lite File: A refined file for focused analysis, streamlined for essential insights."
+          -F caption="📑 **Streamlined Lite File:** A refined dataset crafted for efficient, focused analyses and lightweight data handling."
