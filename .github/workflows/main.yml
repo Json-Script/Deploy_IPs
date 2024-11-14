@@ -25,25 +25,30 @@ jobs:
       run: |
         curl -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument" \
           -F chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" \
+          -F parse_mode="HTML" \
           -F document=@export.json \
-          -F caption="📂 **Export Data File:** A meticulously compiled dataset encompassing all network information for advanced analytical processes and system management."
+          -F caption="<b>📂 Export Data File:</b> A meticulously compiled dataset encompassing all network information for advanced analytical processes and system management."
 
         curl -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument" \
           -F chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" \
+          -F parse_mode="HTML" \
           -F document=@ipv4.json \
-          -F caption="🌐 **IPv4 Address Registry:** A curated repository of IPv4 addresses, methodically organized to support targeted tracking and comprehensive data analysis."
+          -F caption="<b>🌐 IPv4 Address Registry:</b> A curated repository of IPv4 addresses, methodically organized to support targeted tracking and comprehensive data analysis."
 
         curl -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument" \
           -F chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" \
+          -F parse_mode="HTML" \
           -F document=@ipv6.json \
-          -F caption="🌍 **IPv6 Address Registry:** An extensive collection of IPv6 addresses, optimized for systematic tracking and strategic analytical requirements."
+          -F caption="<b>🌍 IPv6 Address Registry:</b> An extensive collection of IPv6 addresses, optimized for systematic tracking and strategic analytical requirements."
 
         curl -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument" \
           -F chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" \
+          -F parse_mode="HTML" \
           -F document=@full \
-          -F caption="📋 **Comprehensive Full File:** A detailed data file supporting broad analytical applications and sophisticated data management operations."
+          -F caption="<b>📋 Comprehensive Full File:</b> A detailed data file supporting broad analytical applications and sophisticated data management operations."
 
         curl -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument" \
           -F chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" \
+          -F parse_mode="HTML" \
           -F document=@lite \
-          -F caption="📑 **Streamlined Lite File:** A refined dataset crafted for efficient, focused analyses and lightweight data handling."
+          -F caption="<b>📑 Streamlined Lite File:</b> A refined dataset crafted for efficient, focused analyses and lightweight data handling."
