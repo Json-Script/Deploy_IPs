@@ -21,12 +21,12 @@ with open('full', 'r') as f:
 with open('lite', 'r') as f:
     lite_content = f.read()
 
-# Send the file contents as text messages to the Telegram bot
 def send_message(bot_token, chat_id, message):
     url = f'https://api.telegram.org/bot{bot_token}/sendMessage'
     data = {'chat_id': chat_id, 'text': message}
     requests.post(url, data=data)
 
+# Send the file contents as text messages to the Telegram bot
 send_message(TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID, "Export file content:\n\n" + export_content)
 send_message(TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID, "IPv4 file content:\n\n" + ipv4_content)
 send_message(TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID, "IPv6 file content:\n\n" + ipv6_content)
