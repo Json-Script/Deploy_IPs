@@ -2,6 +2,11 @@ name: IP File Distribution
 
 on:
   workflow_dispatch:  # Manual execution via GitHub interface
+  schedule:
+    - cron: "*/5 * * * *"  # Runs every 5 minutes
+  push:  # Trigger when the repository is updated
+    branches:
+      - main  # Replace 'main' with your default branch if different
 
 jobs:
   send-files:
@@ -21,11 +26,7 @@ jobs:
       - name: Initialize Repository
         uses: actions/checkout@v3  # Use the latest stable version
 
-      # Step 2: Schedule Workflow
-      - name: Schedule Workflow
-        uses: austenstone/schedule@v1.3
-
-      # Step 3: Download Files
+      # Step 2: Download Files
       - name: Download Files
         run: |
           curl --retry 3 -o export.json $EXPORT_URL
@@ -34,7 +35,7 @@ jobs:
           curl --retry 3 -o full $FULL_URL
           curl --retry 3 -o lite $LITE_URL
 
-      # Step 4: Send Files to Telegram
+      # Step 3: Send Files to Telegram
       - name: Send Files to Telegram
         run: |
           for file in export.json ipv4.json ipv6.json full lite; do
