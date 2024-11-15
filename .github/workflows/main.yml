@@ -3,7 +3,7 @@ name: IP File Distribution
 on:
   workflow_dispatch:  # Manual execution via GitHub interface
   schedule:
-    - cron: '0 * * * *'  # Automatically triggered every hour
+    - cron: '*/5 * * * *'  # Automatically triggered every 5 minutes
 
 jobs:
   send-files:
@@ -36,7 +36,6 @@ jobs:
       - name: Send Files to Telegram
         run: |
           for file in export.json ipv4.json ipv6.json full lite; do
-            # Set the caption based on the file name
             case $file in
               export.json)
                 caption="📂 Export Data File: Comprehensive dataset for analysis." ;;
@@ -50,7 +49,6 @@ jobs:
                 caption="📑 Lite File: Streamlined dataset for focused analysis." ;;
             esac
 
-            # Send the file to Telegram
             curl --retry 3 -X POST "https://api.telegram.org/bot$BOT_TOKEN/sendDocument" \
               -F chat_id="$CHAT_ID" \
               -F document=@$file \
