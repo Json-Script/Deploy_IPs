@@ -54,3 +54,11 @@ jobs:
               -F document=@$file \
               -F caption="$caption"
           done
+
+      # Step 4: Run the Telegram Bot
+      - name: Run Telegram Bot
+        run: |
+          python3 Telegram_bot/bot.py
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
