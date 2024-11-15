@@ -1,4 +1,4 @@
-name: IP File Distribution
+name: IP File
 
 on:
   workflow_dispatch:  # Manual execution via GitHub interface
