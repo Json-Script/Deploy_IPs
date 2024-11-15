@@ -1,4 +1,4 @@
-name: IP File
+name: IP File Distribution
 
 on:
   workflow_dispatch:  # Manual execution via GitHub interface
@@ -54,3 +54,11 @@ jobs:
               -F document=@$file \
               -F caption="$caption"
           done
+
+      # Step 4: Send /list Command to Telegram (Optional step for bot automation)
+      - name: Send /list Command to Telegram
+        run: |
+          # Sending a /list command to the bot (simulate interaction)
+          curl --retry 3 -X POST "https://api.telegram.org/bot$BOT_TOKEN/sendMessage" \
+            -d chat_id="$CHAT_ID" \
+            -d text="/list"
