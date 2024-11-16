@@ -3,7 +3,7 @@ name: IP File Distribution
 on:
   workflow_dispatch:  # Manual execution via GitHub interface
   schedule:
-    - cron: "*/5 * * * *"  # Runs every 5 minutes
+    - cron: "*/10 * * * *"  # Runs every 5 minutes
   push:  # Trigger when the repository is updated
     branches:
       - main  # Replace 'main' with your default branch if different
